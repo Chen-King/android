@@ -102,7 +102,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:singleLine="true"
                     android:hint="请输入"
-                    android:text="@={viewModel.phone}"
+                    android:text="@={viewModel.info.name}"
                     android:imeOptions="actionSend" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -140,7 +140,7 @@
                     android:singleLine="true"
                     tools:text="13960093036"
                     android:maxLength="11"
-                    android:text="@={viewModel.phone}"/>
+                    android:text="@={viewModel.info.phone}"/>
 
                 <Button
                     android:id="@+id/gain_phone"
@@ -187,7 +187,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:singleLine="true"
                     android:hint="请输入"
-                    android:text="@={viewModel.contact}"
+                    android:text="@={viewModel.info.contact}"
                     android:imeOptions="actionSend" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -223,7 +223,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:singleLine="true"
                     android:hint="请输入"
-                    android:text="@={viewModel.contactPhone}"
+                    android:text="@={viewModel.info.contactPhone}"
                     android:imeOptions="actionSend" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
