@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.psycounselplatform.R;
 import com.example.psycounselplatform.databinding.ActivityPersonalBinding;
+import com.example.psycounselplatform.ui.baseView.PhotoView;
 import com.example.psycounselplatform.ui.main.MainActivity;
 import com.example.psycounselplatform.ui.personal.model.Info;
 import com.example.psycounselplatform.util.LogUtil;
@@ -21,6 +22,7 @@ import com.example.psycounselplatform.util.LogUtil;
 public class PersonalActivity extends AppCompatActivity {
     private PersonalViewModel personalViewModel;
     private Context context;
+    private PhotoView photoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,9 @@ public class PersonalActivity extends AppCompatActivity {
         personalViewModel.setInfo(new Info());
         binding.setViewModel(personalViewModel);
 
+        binding.profile.setOnClickListener(v -> {
+            photoView.showDialog();
+        });
         binding.gainPhone.setOnClickListener(view -> {
             personalViewModel.gainPhone();
         });
@@ -62,6 +67,9 @@ public class PersonalActivity extends AppCompatActivity {
         binding.confirm.setOnClickListener(view -> {
             personalViewModel.confirm();
         });
+
+        photoView = new PhotoView(context);
+        photoView.setActivity(this);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.psycounselplatform.ui.main.ui.dashboard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.psycounselplatform.databinding.FragmentDashboardBinding;
+import com.example.psycounselplatform.ui.chat.ChatActivity;
 
 public class DashboardFragment extends Fragment {
 
@@ -27,13 +29,16 @@ public class DashboardFragment extends Fragment {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
+        binding.chatGoBtn.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), ChatActivity.class));
         });
+//        final TextView textView = binding.textDashboard;
+//        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
         return root;
     }
 

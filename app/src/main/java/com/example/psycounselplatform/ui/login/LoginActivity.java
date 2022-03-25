@@ -8,6 +8,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,27 +33,34 @@ import com.example.psycounselplatform.R;
 import com.example.psycounselplatform.ui.login.LoginViewModel;
 import com.example.psycounselplatform.ui.login.LoginViewModelFactory;
 import com.example.psycounselplatform.databinding.ActivityLoginBinding;
+import com.example.psycounselplatform.ui.main.MainActivity;
 import com.example.psycounselplatform.ui.personal.PersonalActivity;
+import com.example.psycounselplatform.util.LogUtil;
+import com.tencent.imsdk.v2.V2TIMManager;
+import com.tencent.imsdk.v2.V2TIMSDKConfig;
+import com.tencent.imsdk.v2.V2TIMSDKListener;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
-
+    private Context context;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        context = this;
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        initIMSDK();
+
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//左侧添加一个默认的返回图标
 //        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
 
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
@@ -85,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
+//                    LogUtil.e("LoginActivity", "display name:" + loginResult.getSuccess().getDisplayName());
                     updateUiWithUser(loginResult.getSuccess());
                     saveEmailAndPassword(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 }
@@ -126,13 +136,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
+        loginButton.setOnClickListener(v -> {
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            loginViewModel.login(usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString());
         });
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
@@ -140,6 +147,34 @@ public class LoginActivity extends AppCompatActivity {
         String password = pref.getString("Password", "");
         usernameEditText.setText(email);
         passwordEditText.setText(password);
+    }
+
+    private void initIMSDK() {
+        V2TIMSDKConfig config = new V2TIMSDKConfig();
+        config.setLogLevel(V2TIMSDKConfig.V2TIM_LOG_INFO);
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("正在初始化IMSDK");
+//        LogUtil.e("LoginActivity", "init sdk");
+        progressDialog.show();
+        V2TIMManager.getInstance().initSDK(this, 1400646938, config, new V2TIMSDKListener() {
+            @Override
+            public void onConnectSuccess() {
+                super.onConnectSuccess();
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                    Toast.makeText(context, "初始化IMSDK完毕", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onConnectFailed(int code, String error) {
+                super.onConnectFailed(code, error);
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                    Toast.makeText(context, "初始化IMSDK失败", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void saveEmailAndPassword(String email, String password) {
@@ -157,6 +192,8 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), PersonalActivity.class);
 
             startActivity(intent);
+        }else{
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
     }
 

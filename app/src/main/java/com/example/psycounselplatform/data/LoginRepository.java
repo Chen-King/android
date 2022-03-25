@@ -1,6 +1,9 @@
 package com.example.psycounselplatform.data;
 
 import com.example.psycounselplatform.data.model.LoggedInUser;
+import com.example.psycounselplatform.util.GenerateTestUserSig;
+import com.tencent.imsdk.v2.V2TIMCallback;
+import com.tencent.imsdk.v2.V2TIMManager;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -46,6 +49,17 @@ public class LoginRepository {
     public Result<LoggedInUser> login(String username, String password) {
         // handle login
         Result<LoggedInUser> result = dataSource.login(username, password);
+        V2TIMManager.getInstance().login(username, GenerateTestUserSig.genTestUserSig(username), new V2TIMCallback() {
+            @Override
+            public void onSuccess() {
+//                result = dataSource.login(username, password);
+            }
+
+            @Override
+            public void onError(int code, String desc) {
+
+            }
+        });
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }

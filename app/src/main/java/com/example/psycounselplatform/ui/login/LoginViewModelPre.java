@@ -1,46 +1,44 @@
 package com.example.psycounselplatform.ui.login;
 
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.util.Patterns;
-
+import com.example.psycounselplatform.R;
 import com.example.psycounselplatform.data.LoginRepository;
 import com.example.psycounselplatform.data.Result;
 import com.example.psycounselplatform.data.model.LoggedInUser;
-import com.example.psycounselplatform.R;
-import com.example.psycounselplatform.util.GenerateTestUserSig;
-import com.example.psycounselplatform.util.LogUtil;
-import com.tencent.imsdk.v2.V2TIMCallback;
-import com.tencent.imsdk.v2.V2TIMManager;
 
-public class LoginViewModel extends ViewModel {
+public class LoginViewModelPre extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private LoginRepository loginRepository;
+
+    LoginViewModelPre(LoginRepository loginRepository) {
+        this.loginRepository = loginRepository;
+    }
 
     LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
     }
 
-    public MutableLiveData<LoginResult> getLoginResult() {
+    LiveData<LoginResult> getLoginResult() {
         return loginResult;
     }
 
     public void login(String username, String password) {
-        V2TIMManager.getInstance().login(username, GenerateTestUserSig.genTestUserSig(username), new V2TIMCallback() {
-            @Override
-            public void onSuccess() {
-                loginResult.setValue(new LoginResult(new LoggedInUserView("用户名", true)));
-//                result = dataSource.login(username, password);
-            }
+        // can be launched in a separate asynchronous job
+        Result<LoggedInUser> result = loginRepository.login(username, password);
 
-            @Override
-            public void onError(int code, String desc) {
-                loginResult.setValue(new LoginResult(R.string.login_failed));
-            }
-        });
+        if (result instanceof Result.Success) {
+            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName(), data.isRegistered())));
+        } else {
+            loginResult.setValue(new LoginResult(R.string.login_failed));
+        }
     }
 
     public void loginDataChanged(String username, String password) {

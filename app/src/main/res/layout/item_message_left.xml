@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@android:color/darker_gray">
+
+        <ImageView
+            android:id="@+id/profile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/profile"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/rectangle"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="@id/profile"
+            app:layout_constraintBottom_toBottomOf="@id/profile"
+            app:layout_constraintLeft_toRightOf="@id/profile"
+            android:src="@drawable/rec_left" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/profile"
+            app:layout_constraintTop_toTopOf="@id/profile"
+            tools:text="123456\n999"
+            android:background="@drawable/corner_white"
+            android:padding="15dp"
+            android:minHeight="60dp"
+            android:textSize="20sp"
+            android:lineSpacingExtra="15dp"
+            android:layout_marginLeft="16dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
