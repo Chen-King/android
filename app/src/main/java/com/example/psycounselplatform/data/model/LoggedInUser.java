@@ -1,29 +1,34 @@
 package com.example.psycounselplatform.data.model;
 
+import java.io.Serializable;
+
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
-public class LoggedInUser {
+public class LoggedInUser implements Serializable {
 
-    private String userId;
-    private String displayName;
-    private boolean registered;
+    private Integer id;
+    private String role;
+    private boolean registered = true;
+    private String token;
 
-    public LoggedInUser(String userId, String displayName, boolean registered) {
-        this.userId = userId;
-        this.displayName = displayName;
-        this.registered = registered;
+    public Integer getId() {
+        return id;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getDisplayName() {
-        return displayName;
+    public String getRole() {
+        return role;
     }
 
     public boolean isRegistered() {
         return registered;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 }

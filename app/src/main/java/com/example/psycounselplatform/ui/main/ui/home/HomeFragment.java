@@ -1,5 +1,6 @@
 package com.example.psycounselplatform.ui.main.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.psycounselplatform.databinding.FragmentHomeBinding;
+import com.example.psycounselplatform.ui.personal.PersonalActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -27,6 +29,9 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        binding.edit.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), PersonalActivity.class));
+        });
 //        final TextView textView = binding.textHome;
 //        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
 //            @Override

@@ -7,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -17,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.psycounselplatform.R;
 import com.example.psycounselplatform.data.model.Message;
@@ -42,8 +42,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         chatViewMdoel = new ViewModelProvider(this).get(ChatViewMdoel.class);
         binding.setViewModel(chatViewMdoel);
 
+//        MessageAdapterPre messageAdapter = new MessageAdapterPre(context, new ArrayList<>());
         MessageAdapter messageAdapter = new MessageAdapter(context, new ArrayList<>());
         messageAdapter.setClickListener(this::onClick);
+        binding.listMessage.setLayoutManager(new LinearLayoutManager(context));
         binding.listMessage.setAdapter(messageAdapter);
         chatViewMdoel.updateMessgae();
 
@@ -52,6 +54,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             public void onChanged(List<Message> messages) {
                 messageAdapter.setmList(messages);
                 messageAdapter.notifyDataSetChanged();
+                if(messages != null && messages.size() > 0)
+                    binding.listMessage.smoothScrollToPosition(messages.size() - 1);
             }
         });
 
@@ -61,6 +65,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(context, s, Toast.LENGTH_LONG).show();
             }
         });
+
+        chatViewMdoel.addListener();
 
         ImageView ivPic = binding.ivPic;
         ImageView ivSend = binding.ivSend;

@@ -30,8 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.psycounselplatform.R;
+import com.example.psycounselplatform.data.model.LoggedInUser;
 import com.example.psycounselplatform.ui.login.LoginViewModel;
-import com.example.psycounselplatform.ui.login.LoginViewModelFactory;
+//import com.example.psycounselplatform.ui.login.LoginViewModelFactory;
 import com.example.psycounselplatform.databinding.ActivityLoginBinding;
 import com.example.psycounselplatform.ui.main.MainActivity;
 import com.example.psycounselplatform.ui.personal.PersonalActivity;
@@ -97,11 +98,12 @@ public class LoginActivity extends AppCompatActivity {
 //                    LogUtil.e("LoginActivity", "display name:" + loginResult.getSuccess().getDisplayName());
                     updateUiWithUser(loginResult.getSuccess());
                     saveEmailAndPassword(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                    finish();
                 }
-                setResult(Activity.RESULT_OK);
+//                setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
-                finish();
+
             }
         });
 
@@ -156,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("正在初始化IMSDK");
 //        LogUtil.e("LoginActivity", "init sdk");
         progressDialog.show();
-        V2TIMManager.getInstance().initSDK(this, 1400646938, config, new V2TIMSDKListener() {
+        V2TIMManager.getInstance().initSDK(this, 1400645946, config, new V2TIMSDKListener() {
             @Override
             public void onConnectSuccess() {
                 super.onConnectSuccess();
@@ -184,10 +186,10 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+    private void updateUiWithUser(LoggedInUser model) {
+//        String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
         if(!model.isRegistered()){
             Intent intent = new Intent(getApplicationContext(), PersonalActivity.class);
 
@@ -197,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    private void showLoginFailed(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

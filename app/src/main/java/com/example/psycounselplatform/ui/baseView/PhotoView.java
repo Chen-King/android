@@ -79,6 +79,7 @@ public class PhotoView extends androidx.appcompat.widget.AppCompatImageView {
         Window dialogWindow = dialog.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         //lp.width = (int) (ScreenSizeUtils.getInstance(this).getScreenWidth() * 0.9f);
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.BOTTOM;
         dialogWindow.setAttributes(lp);

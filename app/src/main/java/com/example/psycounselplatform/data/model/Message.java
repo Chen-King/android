@@ -1,7 +1,7 @@
 package com.example.psycounselplatform.data.model;
 
 public class Message {
-    private boolean isMe;
+    private boolean isSelf;
     private String content;
     private String profile;
 
@@ -21,11 +21,11 @@ public class Message {
         this.profile = profile;
     }
 
-    public boolean isMe() {
-        return isMe;
+    public boolean isSelf() {
+        return isSelf;
     }
 
-    public void setMe(boolean me) {
-        isMe = me;
+    public void setSelf(boolean self) {
+        isSelf = self;
     }
 }

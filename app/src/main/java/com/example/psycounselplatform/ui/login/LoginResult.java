@@ -2,30 +2,37 @@ package com.example.psycounselplatform.ui.login;
 
 import androidx.annotation.Nullable;
 
+import com.example.psycounselplatform.data.model.LoggedInUser;
+import com.example.psycounselplatform.util.MyApplication;
+
 /**
  * Authentication result : success (user details) or error message.
  */
 class LoginResult {
     @Nullable
-    private LoggedInUserView success;
+    private LoggedInUser success;
     @Nullable
-    private Integer error;
+    private String error;
 
-    LoginResult(@Nullable Integer error) {
+    LoginResult(@Nullable String error) {
         this.error = error;
     }
 
-    LoginResult(@Nullable LoggedInUserView success) {
+    LoginResult(@Nullable Integer errorCode) {
+        this.error = MyApplication.getContext().getString(errorCode);
+    }
+
+    LoginResult(@Nullable LoggedInUser success) {
         this.success = success;
     }
 
     @Nullable
-    LoggedInUserView getSuccess() {
+    LoggedInUser getSuccess() {
         return success;
     }
 
     @Nullable
-    Integer getError() {
+    String getError() {
         return error;
     }
 }

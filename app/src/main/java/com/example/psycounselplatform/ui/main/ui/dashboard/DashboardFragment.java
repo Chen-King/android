@@ -1,11 +1,13 @@
 package com.example.psycounselplatform.ui.main.ui.dashboard;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,11 +20,13 @@ import com.example.psycounselplatform.ui.chat.ChatActivity;
 
 public class DashboardFragment extends Fragment {
 
+    private Context context;
     private DashboardViewModel dashboardViewModel;
     private FragmentDashboardBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        context = getContext();
         dashboardViewModel =
                 new ViewModelProvider(this).get(DashboardViewModel.class);
 
@@ -39,6 +43,15 @@ public class DashboardFragment extends Fragment {
 //                textView.setText(s);
 //            }
 //        });
+        dashboardViewModel.getResult().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        dashboardViewModel.setAsReaded();
+
         return root;
     }
 
